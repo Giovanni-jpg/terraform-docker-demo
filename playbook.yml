@@ -1,0 +1,33 @@
+- name: Configure Nginx container
+  hosts: nginx
+  tasks:
+    - name: Ensure Nginx is installed (inside container)
+      apt:
+        name: nginx
+        state: present
+      when: ansible_os_family == "Debian"
+
+    - name: Copy custom index.html
+      copy:
+        src: ./index.html
+        dest: /usr/share/nginx/html/index.html
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Ensure Nginx is running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+- name: Check Nginx is serving content
+  hosts: localhost
+  tasks:
+    - name: Verify Nginx responds on port 8081
+      uri:
+        url: "http://localhost:8081"
+        return_content: yes
+      register: nginx_response
+
+    - debug:
+        msg: "Nginx says: {{ nginx_response.content | regex_search('<h1>.*</h1>') }}"
