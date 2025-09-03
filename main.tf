@@ -10,7 +10,10 @@ terraform {
 provider "docker" {}
 
 resource "docker_image" "nginx" {
-  name = "nginx:latest"
+  name = "custom-nginx"
+  build {
+    context = "${path.module}"
+  }
   keep_locally = false
 }
 
@@ -20,9 +23,5 @@ resource "docker_container" "nginx" {
   ports {
     internal = 80
     external = var.host_port
-  }
-  volumes {
-    host_path      = abspath("${path.module}/index.html")
-    container_path = "/usr/share/nginx/html/index.html"
   }
 }
