@@ -8,6 +8,7 @@ It demonstrates how to:
 - Deploy an **Nginx** container
 - Work with `terraform plan`, `apply`, and `destroy`
 - Use **variables** and **outputs**
+- Recent update added use of Ansible to ensure proper config of the infra deployed + mounting a basic html file
 
 ---
 
